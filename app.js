@@ -103,7 +103,7 @@ $('delete').onclick = () => {
 $('name').oninput = e => e.target.setCustomValidity(TUNINGS[kind()][e.target.value.trim()] ? 'A built-in tuning has this name' : '');
 
 $('create').querySelector('form').onsubmit = e => {
-  if (e.submitter.value !== 'save') return;
+  if (e.submitter?.value !== 'save') return;
   const name = $('name').value.trim();
   (custom[kind()] ??= {})[name] = [...$('pickers').children].map(s => s.value).join(' ');
   save('custom', custom);
@@ -114,13 +114,13 @@ $('create').querySelector('form').onsubmit = e => {
 
 let read, recent = [];
 
-// Median of the last few readings keeps the needle steady
 function tick() {
   const freqs = notes().map(noteToFreq);
   const freq = read(Math.min(...freqs) * 0.7, Math.max(...freqs) * 1.5);
   $('display').classList.toggle('idle', !freq);
   if (!freq) return recent = [];
 
+  // Median of the last few readings keeps the needle steady
   recent = [...recent.slice(-4), freq];
   const f = [...recent].sort((a, b) => a - b)[recent.length >> 1];
   const target = locked ?? freqs.reduce((best, x, i) => Math.abs(cents(f, x)) < Math.abs(cents(f, freqs[best])) ? i : best, 0);
@@ -144,5 +144,6 @@ $('start').onclick = async () => {
   setInterval(tick, 50);
 };
 
+navigator.serviceWorker?.register('sw.js');
 applyTheme();
 render();

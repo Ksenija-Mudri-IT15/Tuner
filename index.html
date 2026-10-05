@@ -3,7 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Tuner</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
 </head>
@@ -41,8 +48,8 @@
       <input id="name" placeholder="Name" required pattern=".*\S.*">
       <div id="pickers"></div>
       <menu>
-        <button value="cancel" formnovalidate>Cancel</button>
         <button value="save">Save</button>
+        <button value="cancel" formnovalidate>Cancel</button>
       </menu>
     </form>
   </dialog>
