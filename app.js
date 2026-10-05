@@ -1,4 +1,5 @@
 import { TUNINGS, ALL_NOTES } from './tunings.js';
+import { startMic, noteToFreq, freqToNote, cents } from './pitch.js';
 
 const $ = id => document.getElementById(id);
 const load = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
@@ -109,6 +110,38 @@ $('create').querySelector('form').onsubmit = e => {
   state.tuning = name;
   locked = null;
   render();
+};
+
+let read, recent = [];
+
+// Median of the last few readings keeps the needle steady
+function tick() {
+  const freqs = notes().map(noteToFreq);
+  const freq = read(Math.min(...freqs) * 0.7, Math.max(...freqs) * 1.5);
+  $('display').classList.toggle('idle', !freq);
+  if (!freq) return recent = [];
+
+  recent = [...recent.slice(-4), freq];
+  const f = [...recent].sort((a, b) => a - b)[recent.length >> 1];
+  const target = locked ?? freqs.reduce((best, x, i) => Math.abs(cents(f, x)) < Math.abs(cents(f, freqs[best])) ? i : best, 0);
+  const c = cents(f, freqs[target]), rounded = Math.round(c);
+
+  $('display').classList.toggle('in-tune', Math.abs(c) < 5);
+  $('note').textContent = freqToNote(f);
+  $('freq').textContent = f.toFixed(1) + ' Hz';
+  $('cents').textContent = (rounded > 0 ? '+' : '') + rounded + '¢';
+  $('needle').style.left = 50 + Math.max(-50, Math.min(50, c)) + '%';
+  [...$('pegs').children].forEach((b, i) => b.classList.toggle('target', i - 1 === target));
+}
+
+$('start').onclick = async () => {
+  try {
+    read = await startMic();
+  } catch {
+    return alert('The tuner needs microphone access.');
+  }
+  $('start').hidden = true;
+  setInterval(tick, 50);
 };
 
 applyTheme();
