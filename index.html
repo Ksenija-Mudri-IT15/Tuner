@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tuner</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header>
+    <div class="seg" id="instrument">
+      <button data-value="guitar">Guitar</button>
+      <button data-value="bass">Bass</button>
+    </div>
+    <div class="seg" id="strings" hidden>
+      <button data-value="4">4</button>
+      <button data-value="5">5</button>
+      <button data-value="6">6</button>
+    </div>
+    <button id="theme" aria-label="Toggle theme"></button>
+  </header>
+
+  <div class="row">
+    <select id="tuning" aria-label="Tuning">
+      <option>Standard</option>
+    </select>
+    <button id="delete" hidden>Delete</button>
+  </div>
+
+  <main id="display" class="idle">
+    <div id="note">–</div>
+    <div><span id="freq">0.0 Hz</span> · <span id="cents">0¢</span></div>
+    <div id="meter"><div id="needle"></div></div>
+  </main>
+
+  <div id="pegs">
+    <button class="active">Auto</button>
+    <button>E</button><button>A</button><button>D</button><button>G</button><button>B</button><button>E</button>
+  </div>
+  <button id="start">Start</button>
+
+  <dialog id="create">
+    <form method="dialog">
+      <h2>New tuning</h2>
+      <input id="name" placeholder="Name" required pattern=".*\S.*">
+      <div id="pickers"></div>
+      <menu>
+        <button value="cancel" formnovalidate>Cancel</button>
+        <button value="save">Save</button>
+      </menu>
+    </form>
+  </dialog>
+</body>
+</html>
