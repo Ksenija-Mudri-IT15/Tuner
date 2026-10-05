@@ -87,6 +87,7 @@ header, .row { display: flex; gap: .5rem; align-items: center; }
 
 dialog {
   width: min(100% - 2rem, 28rem);
+  margin: auto;
   padding: 1.25rem;
   border: 0;
   border-radius: 1rem;
